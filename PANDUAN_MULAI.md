@@ -1,4 +1,4 @@
-# Panduan Mulai (v0.2.2)
+# Panduan Mulai (v0.2.3)
 
 Tujuan: dari nol sampai fase 1 selesai di Google AI Studio, dengan database di Supabase dan kode di GitHub.
 Nama menu di AI Studio, Supabase, dan GitHub dapat berubah; gunakan sebagai petunjuk, bukan kata demi kata.
@@ -43,7 +43,7 @@ Saran: buat **dua proyek Supabase** bila memungkinkan: satu untuk pengembangan (
 insert into public.users (id, nama, role_id)
 select id, 'Administrator', 'admin' from auth.users where email = 'EMAIL_ANDA';
 ```
-5. Catat dari Project Settings, API: `Project URL`, kunci `anon` (publik, aman untuk antarmuka) dan kunci `service_role` (RAHASIA: hanya server, tidak pernah di antarmuka). Simpan di pengelola kata sandi.
+5. Catat `Project URL` (dialog Connect), lalu di **Settings > API Keys** kunci **Publishable** (publik, aman untuk antarmuka) dan **Secret** (RAHASIA: hanya server, tidak pernah di antarmuka). Kunci lama bernama `anon`/`service_role` setara. Simpan di pengelola kata sandi. Rincian semua kunci: `PANDUAN_KUNCI_RAHASIA.md`.
 6. Cek: Table Editor menampilkan tabel; tiap tabel berlabel RLS aktif (kecuali yang memang di skema `private`).
 
 ## D. Hubungkan AI Studio
@@ -66,7 +66,7 @@ Cocok bila: onboarding 28 modul = 26, 45 modul = 41; pembatalan dikeluarkan; kum
 
 ### D3. Kunci rahasia
 Tambahkan lewat pengaturan Secrets/Environment di project AI Studio (nama menu dapat berbeda), bukan di kode:
-- Sekarang (fase 1): `SUPABASE_URL`, kunci `anon` untuk antarmuka (variabel berawalan `VITE_`), dan server memakai `SUPABASE_SERVICE_ROLE_KEY`.
+- Sekarang (fase 1): `SUPABASE_URL`, kunci publishable untuk antarmuka (variabel berawalan `VITE_`), dan server memakai `SUPABASE_SECRET_KEY`.
 - Fase 2: `ALIAS_HMAC_SECRET` (acak, panjang; **jangan diganti setelah data masuk**, karena alias akan berubah; cadangkan), `GOOGLE_SERVICE_ACCOUNT_JSON`.
 - Fase 2b: `CRON_SECRET`.
 - Fase 4: `GEMINI_API_KEY`.
@@ -100,7 +100,7 @@ Untuk setiap fase (01, 02, 02b, 03, 04, 05):
 3. Jangan menjadikan sheet "publik di web" hanya demi kemudahan: itu membuka data pribadi.
 
 ### Fase 5, Vercel
-Impor repositori ke Vercel, isi variabel lingkungan (sama dengan D3, kunci produksi baru), uji. Bagian server dari AI Studio mungkin perlu disesuaikan agar berjalan sebagai Vercel Functions; prompt fase 5 sudah meminta itu diuji. Cek batas cron pada paket Vercel Anda.
+Impor repositori ke Vercel, isi variabel lingkungan (sama dengan D3, kunci produksi baru), uji. Bagian server dari AI Studio mungkin perlu disesuaikan agar berjalan sebagai Vercel Functions; prompt fase 5 sudah meminta itu diuji. Paket Hobby Vercel membatasi cron satu kali per hari dengan waktu bebas dalam jam yang ditentukan (mis. jadwal 07:00 dapat berjalan 07:00-07:59); paket Pro per menit. Pengiriman cron bersifat best effort (dapat terlewat atau terkirim ganda), sehingga rancangan kita idempoten dan ada tombol "Perbarui semua". Periksa juga ketentuan penggunaan paket Hobby untuk instansi.
 
 ## F. Jika ada masalah
 | Gejala | Tindakan |
@@ -115,5 +115,5 @@ Impor repositori ke Vercel, isi variabel lingkungan (sama dengan D3, kunci produ
 ## G. Daftar periksa keamanan singkat
 - Repositori Private; tidak ada kunci di kode atau riwayat commit.
 - Sign-up mandiri Supabase nonaktif; admin dengan kata sandi kuat; 2FA tidak diterapkan (keputusan Anda), dikompensasi penguncian, batas sesi, dan audit log.
-- `service_role` dan `ALIAS_HMAC_SECRET` hanya di server.
+- Kunci secret Supabase dan `ALIAS_HMAC_SECRET` hanya di server.
 - Data fiktif sampai tinjauan privasi selesai.

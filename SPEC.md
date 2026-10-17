@@ -1,4 +1,7 @@
-# SPEC MVP-1 (v0.2.2)
+# SPEC MVP-1 (v0.2.3)
+
+## Perubahan v0.2.3
+- Nama kunci Supabase mengikuti yang baru (publishable/secret). Cron Vercel dipanggil dengan GET, best effort (idempoten). Gemini produksi memakai layanan berbayar. Panduan kunci rahasia ditambahkan.
 
 ## Perubahan v0.2.2 (minimisasi identitas)
 - Nama dan instansi TIDAK disimpan di sistem; hanya ada di sheet sumber. Satu-satunya identitas yang disimpan: nomor registrasi, di skema `private` (admin, RLS), untuk tindak lanjut.
@@ -62,6 +65,7 @@ Bukti agent: loop rencana -> alat -> tulis -> verifikasi -> gerbang manusia, sta
 ## 5. Privasi dan etika
 - Minimisasi identitas: nama dan instansi dibuang saat pemrosesan (tidak disimpan, tidak di log). Nomor registrasi disimpan hanya di `private.alias_map` (RLS, tanpa policy klien) untuk tindak lanjut. Semua lapisan lain (peserta_masked, snapshot, agent, Gemini, laporan) hanya alias/agregat.
 - Tampilan: daftar tindak lanjut menampilkan alias dan nomor registrasi tersamar (`maskNoReg`, 4 karakter terakhir). Nomor penuh hanya lewat `buka_identitas(alias, alasan)`: admin, alasan >= 10 karakter, tercatat di audit_log; tampil di layar, tidak diekspor massal.
+- Gemini: pengembangan dengan data fiktif boleh tingkat gratis; produksi memakai layanan berbayar (ketentuan Gemini API: layanan gratis dapat memakai konten untuk peningkatan produk dan peninjauan manusia; layanan berbayar tidak, tetapi dicatat sementara untuk deteksi penyalahgunaan dan dapat disimpan sementara di negara mana pun). Tinjau terhadap UU No. 27/2022 (transfer lintas negara) dan kebijakan instansi.
 - Sentinel keluar: `containsIdentifier` memeriksa semua teks ke Gemini dan ke laporan terhadap nomor registrasi yang sedang diproses + pola PII umum; terdeteksi -> blok dan catat.
 - Nomor registrasi bukan anonim: dapat dicocokkan dengan nama lewat sheet/LMS. Pertimbangan UU No. 27/2022 berlaku penuh.
 - Minimisasi ke Gemini: hanya alias + progres + agregat. Sentinel PII sebelum panggilan.

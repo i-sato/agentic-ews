@@ -8,7 +8,7 @@ UPT BLSDM Komdigi Yogyakarta. Versi paket 0.2.2 (draf untuk ditinjau tim). Perub
 - **Supabase** (akun sendiri) = database, auth, RLS, realtime. Skema produksi berasal dari `contracts/migrations/`, bukan dari prototipe.
 
 ## Mulai dari sini
-Baca `PANDUAN_MULAI.md` (langkah demi langkah dari akun sampai fase 1).
+Baca `PANDUAN_MULAI.md` (langkah demi langkah dari akun sampai fase 1) dan `PANDUAN_KUNCI_RAHASIA.md` (dari mana tiap kunci diperoleh dan cara menyiapkannya).
 
 ## Isi
 | Berkas/Folder | Fungsi |
@@ -29,7 +29,7 @@ Baca `PANDUAN_MULAI.md` (langkah demi langkah dari akun sampai fase 1).
 2. Buat proyek Supabase (akun sendiri), jalankan `001_schema.sql`, `002_pemantauan.sql`, lalu `003_minimisasi_identitas.sql` (sebelum ada data).
 3. Di AI Studio (Build mode) hubungkan repo, jalankan prompt fase 1..5 berurutan.
 4. `cd reference && node --test` untuk memastikan aturan hitung benar sebelum dan sesudah tiap fase.
-5. Variabel lingkungan (server saja): `GEMINI_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ALIAS_HMAC_SECRET`, `GOOGLE_SERVICE_ACCOUNT_JSON` (read-only), `CRON_SECRET`. Jangan pernah di kode klien.
+5. Variabel lingkungan (server saja): `GEMINI_API_KEY`, `SUPABASE_URL`, `SUPABASE_SECRET_KEY` (sisi UI: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`), `ALIAS_HMAC_SECRET`, `GOOGLE_SERVICE_ACCOUNT_JSON` (read-only), `CRON_SECRET`. Jangan pernah di kode klien.
 
 ## Peringatan
 - Data peserta diperlakukan sebagai data pribadi (kemungkinan termasuk anak/remaja). Jangan unggah data asli ke Lovable atau alat uji.
