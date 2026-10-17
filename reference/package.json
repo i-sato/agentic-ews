@@ -1,0 +1,1 @@
+{"name":"reference","private":true,"type":"module","scripts":{"test":"node --test rules.test.ts"},"engines":{"node":">=22.18"}}

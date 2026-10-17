@@ -1,0 +1,357 @@
+{
+ "versi": "0.2",
+ "catatan": "Deklarasi function calling Gemini. Eksekusi di server (Vercel Functions); AI tidak pernah memegang kunci atau data mentah. Semua alat menulis agent_run_steps.",
+ "alat": [
+  {
+   "name": "baca_pk_sumber",
+   "description": "Ambil isi PK tahun anggaran tertentu (teks/tabel dari Sheet 'PK' bila ada, jika tidak teks PDF).",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "tahun"
+    ],
+    "properties": {
+     "tahun": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  {
+   "name": "simpan_pk_profil",
+   "description": "Simpan profil PK terstruktur (divalidasi terhadap pk_profil.schema.json).",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "profil"
+    ],
+    "properties": {
+     "profil": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  {
+   "name": "ambil_aturan",
+   "description": "Ambil rule pack untuk tim kerja dan versi.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "rule_pack"
+    ],
+    "properties": {
+     "rule_pack": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "parse_nama_berkas",
+   "description": "Parsing deterministik nama berkas (regex). Mengembalikan hasil + keyakinan. Panggil dulu sebelum mengusulkan tafsir sendiri.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "nama_berkas"
+    ],
+    "properties": {
+     "nama_berkas": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "cari_program_ref",
+   "description": "Cari tema/alias di program_ref.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "kata_kunci"
+    ],
+    "properties": {
+     "kata_kunci": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "buat_item_validasi",
+   "description": "Buat item Antrean Validasi bila tidak yakin.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "batch_id",
+     "jenis",
+     "detail"
+    ],
+    "properties": {
+     "batch_id": {
+      "type": "string"
+     },
+     "jenis": {
+      "type": "string"
+     },
+     "detail": {
+      "type": "object"
+     },
+     "saran": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  {
+   "name": "hitung_capaian",
+   "description": "Hitung onboarding/lulus/capaian dari data termasking. Satu-satunya sumber angka.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "tahun"
+    ],
+    "properties": {
+     "tahun": {
+      "type": "integer"
+     },
+     "batch_ids": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "sampai_tanggal": {
+      "type": "string"
+     },
+     "mode": {
+      "enum": [
+       "resmi",
+       "termasuk_sementara"
+      ]
+     }
+    }
+   }
+  },
+  {
+   "name": "ambil_batch_periode",
+   "description": "Daftar batch yang beririsan dengan rentang tanggal, beserta status validasi.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "awal",
+     "akhir"
+    ],
+    "properties": {
+     "awal": {
+      "type": "string"
+     },
+     "akhir": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "proyeksi_kebutuhan_lulus",
+   "description": "Kebutuhan lulus tambahan agar capaian >= target untuk batch berjalan.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "batch_id"
+    ],
+    "properties": {
+     "batch_id": {
+      "type": "string"
+     },
+     "target": {
+      "type": "number"
+     }
+    }
+   }
+  },
+  {
+   "name": "simpan_ews",
+   "description": "Simpan hasil analisis EWS (divalidasi ews_analisis.schema.json).",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "hasil"
+    ],
+    "properties": {
+     "hasil": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  {
+   "name": "susun_rencana_laporan",
+   "description": "Daftar bagian laporan + batch yang tercakup untuk bulan/TA.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "tahun",
+     "bulan"
+    ],
+    "properties": {
+     "tahun": {
+      "type": "integer"
+     },
+     "bulan": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  {
+   "name": "simpan_bagian_laporan",
+   "description": "Simpan satu bagian narasi (laporan_bagian.schema.json). Angka lewat token {{metrik:KUNCI}}.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "bagian"
+    ],
+    "properties": {
+     "bagian": {
+      "type": "object"
+     }
+    }
+   }
+  },
+  {
+   "name": "periksa_laporan",
+   "description": "Pemeriksa deterministik: semua token metrik ada, angka telanjang tidak ada, PII sentinel bersih, ambang sel minimal.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "laporan_id"
+    ],
+    "properties": {
+     "laporan_id": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "minta_keputusan_manusia",
+   "description": "Hentikan alur dan minta persetujuan/keputusan pengguna.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "jenis",
+     "ringkasan"
+    ],
+    "properties": {
+     "jenis": {
+      "enum": [
+       "validasi",
+       "persetujuan_laporan"
+      ]
+     },
+     "ringkasan": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "ambil_batch_dipantau",
+   "description": "Daftar batch yang dipantau (dipantau=true, dalam rentang mulai..selesai+grace) untuk TA, beserta status fetch terakhir. Tanpa data peserta.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "tahun"
+    ],
+    "properties": {
+     "tahun": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  {
+   "name": "fetch_sheet_batch",
+   "description": "Server mengambil ulang tab data dari tautan sheet terdaftar (read-only), memasking dengan mapping alias yang sudah ada, menyimpan peserta_masked dan snapshot harian. Mengembalikan HANYA ringkasan agregat dan anomali, tidak pernah baris data.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "batch_id"
+    ],
+    "properties": {
+     "batch_id": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "bandingkan_snapshot",
+   "description": "Bandingkan snapshot hari ini dengan sebelumnya: perubahan agregat, tren, anomali (total modul berubah, peserta turun tajam, progres mundur, peserta hilang, kunci duplikat).",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "batch_id"
+    ],
+    "properties": {
+     "batch_id": {
+      "type": "string"
+     }
+    }
+   }
+  },
+  {
+   "name": "evaluasi_ews",
+   "description": "Evaluasi portofolio dan per batch (fase waktu, K, B, R, tingkat, alasan) memakai target PK bulan berjalan dan parameter EWS. Menyimpan ews_hasil dan mencatat perubahan tingkat. Satu-satunya penentu tingkat.",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "tahun"
+    ],
+    "properties": {
+     "tahun": {
+      "type": "integer"
+     }
+    }
+   }
+  },
+  {
+   "name": "ambil_parameter_ews",
+   "description": "Baca parameter EWS yang berlaku (hanya baca).",
+   "parameters": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "name": "catat_ringkasan_harian",
+   "description": "Simpan ringkasan harian untuk dashboard (divalidasi ringkasan_harian.schema.json).",
+   "parameters": {
+    "type": "object",
+    "required": [
+     "ringkasan"
+    ],
+    "properties": {
+     "ringkasan": {
+      "type": "object"
+     }
+    }
+   }
+  }
+ ],
+ "tidak_tersedia_untuk_ai": [
+  "buka_alias_map",
+  "hapus_data",
+  "kirim_pesan",
+  "ubah_pengaturan",
+  "unduh_berkas",
+  "ubah_aturan_hitung",
+  "ubah_parameter_ews",
+  "tambah_atau_hapus_tautan_sheet",
+  "ubah_status_pemantauan",
+  "ubah_level_batch",
+  "ubah_target_pk"
+ ],
+ "catatan_otonomi": "Run terjadwal (cron) hanya boleh: fetch tautan yang sudah didaftarkan manusia, hitung, simpan snapshot, buat item validasi dan ringkasan, panggil analis. Tidak boleh: menambah sumber, mengubah level/aturan/parameter, menyetujui laporan."
+}

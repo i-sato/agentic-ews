@@ -1,0 +1,199 @@
+{
+ "deskripsi": "Batch fiktif 45 modul. Batal dikeluarkan (termasuk yang 'selesai').",
+ "peserta": [
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 41,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 43,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 44,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 10,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 40,
+   "totalModul": 45
+  },
+  {
+   "modulSelesai": 0,
+   "totalModul": 45,
+   "batal": true
+  },
+  {
+   "modulSelesai": 45,
+   "totalModul": 45,
+   "batal": true
+  }
+ ],
+ "harapan": {
+  "onboarding": 43,
+  "lulus": 40
+ }
+}

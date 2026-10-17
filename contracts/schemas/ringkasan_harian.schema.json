@@ -1,0 +1,11 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"RingkasanHarian","type":"object",
+"required":["ringkasan","anomali_triase","batch_untuk_analisis","keterbatasan"],
+"properties":{
+ "ringkasan":{"type":"string","maxLength":500,"description":"Maks 4 kalimat; angka hanya sebagai token {{metrik:KUNCI}}"},
+ "anomali_triase":{"type":"array","items":{"type":"object","required":["batch_id","jenis","penilaian","saran"],
+  "properties":{"batch_id":{"type":"string"},
+   "jenis":{"enum":["total_modul_berubah","peserta_turun_tajam","progres_mundur","lulus_turun","peserta_hilang","kunci_duplikat","data_basi","fetch_gagal","tab_hilang","akses_ditolak"]},
+   "penilaian":{"enum":["kemungkinan_perubahan_wajar","perlu_cek_manusia","tidak_jelas"]},
+   "saran":{"type":"string"}}}},
+ "batch_untuk_analisis":{"type":"array","items":{"type":"object","required":["batch_id","alasan"],"properties":{"batch_id":{"type":"string"},"alasan":{"type":"string"}}}},
+ "keterbatasan":{"type":"array","items":{"type":"string"}}}}

@@ -1,0 +1,10 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"EwsAnalisis","type":"object",
+"required":["ringkasan","batch","prioritas","keterbatasan"],
+"properties":{
+ "ringkasan":{"type":"string","maxLength":600},
+ "batch":{"type":"array","items":{"type":"object","required":["batch_id","tingkat","alasan","tindakan_disarankan"],
+  "properties":{"batch_id":{"type":"string"},"tingkat":{"enum":["aman","waspada","kritis","belum_dapat_dinilai"]},
+  "alasan":{"type":"string"},"angka_dirujuk":{"type":"array","items":{"type":"string","description":"kunci metrik dari hasil alat, bukan angka bebas"}},
+  "tindakan_disarankan":{"type":"array","items":{"type":"string"}}}}},
+ "prioritas":{"type":"array","items":{"type":"string"}},
+ "keterbatasan":{"type":"array","items":{"type":"string"}}}}

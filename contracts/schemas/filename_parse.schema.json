@@ -1,0 +1,10 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"FilenameParse","type":"object",
+"required":["id_pelatihan","tema_atau_alias","level","tanggal_mulai","tanggal_selesai","keyakinan","catatan"],
+"properties":{
+ "id_pelatihan":{"type":["string","null"],"pattern":"^[0-9]{5}$"},
+ "tema_atau_alias":{"type":["string","null"]},
+ "level":{"enum":["Fundamental","Intermediate",null]},
+ "tanggal_mulai":{"type":["string","null"],"description":"Hari dan bulan saja: DD-MM; tahun ditentukan dari TA oleh kode"},
+ "tanggal_selesai":{"type":["string","null"]},
+ "keyakinan":{"enum":["tinggi","sedang","rendah"]},
+ "catatan":{"type":"string"}}}

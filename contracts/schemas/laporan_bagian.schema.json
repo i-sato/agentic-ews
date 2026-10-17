@@ -1,0 +1,6 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"LaporanBagian","type":"object",
+"required":["bagian","teks","angka_dirujuk"],
+"properties":{
+ "bagian":{"enum":["Ringkasan_Capaian","Kondisi_Batch","Pelaksanaan_Non_Capaian","Analisis","Rekomendasi","Catatan_Penggunaan_AI"]},
+ "teks":{"type":"string","description":"Teks dengan token {{metrik:KUNCI}} untuk setiap angka; kode yang mengisi angka"},
+ "angka_dirujuk":{"type":"array","items":{"type":"string"}}}}

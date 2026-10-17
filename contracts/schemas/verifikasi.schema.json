@@ -1,0 +1,5 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"Verifikasi","type":"object",
+"required":["lolos","temuan"],
+"properties":{"lolos":{"type":"boolean"},
+ "temuan":{"type":"array","items":{"type":"object","required":["bagian","jenis","detail"],
+  "properties":{"bagian":{"type":"string"},"jenis":{"enum":["angka_tak_dikenal","klaim_tanpa_dasar","pii_terdeteksi","bahasa_menetapkan_individu","lainnya"]},"detail":{"type":"string"}}}}}}

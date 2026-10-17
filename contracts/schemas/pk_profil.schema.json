@@ -1,0 +1,13 @@
+{"$schema":"https://json-schema.org/draft/2020-12/schema","title":"PkProfil","type":"object",
+"required":["tahun","indikator","status","peringatan"],
+"properties":{
+ "tahun":{"type":"integer"},
+ "status":{"enum":["terbaca","terbaca_dengan_peringatan","gagal_dibaca"]},
+ "indikator":{"type":"array","items":{"type":"object","required":["kode","nama","target","polaritas","rumus_teks","pelaporan"],
+  "properties":{"kode":{"type":"string"},"sasaran":{"type":"string"},"nama":{"type":"string"},"target":{"type":"number"},
+  "satuan":{"type":"string"},"polaritas":{"enum":["Maximize","Minimize","Stabilize"]},
+  "rumus_teks":{"type":"string"},"pelaporan":{"enum":["bulanan","triwulan","semester","tahunan"]},
+  "target_antara":{"type":"array","items":{"type":"object","required":["bulan","nilai"],"properties":{"bulan":{"type":"integer","minimum":1,"maximum":12},"nilai":{"type":"number"}}}},
+  "tim_kerja_kode":{"type":["string","null"]},"kutipan_sumber":{"type":"string"}}}},
+ "peringatan":{"type":"array","items":{"type":"object","required":["kode","pesan"],"properties":{"kode":{"enum":["rumus_berubah","target_beda","tim_tidak_dikenal","bagian_tidak_terbaca","lainnya"]},"pesan":{"type":"string"}}}}
+}}
