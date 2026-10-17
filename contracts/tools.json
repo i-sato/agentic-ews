@@ -1,5 +1,5 @@
 {
- "versi": "0.2",
+ "versi": "0.2.2",
  "catatan": "Deklarasi function calling Gemini. Eksekusi di server (Vercel Functions); AI tidak pernah memegang kunci atau data mentah. Semua alat menulis agent_run_steps.",
  "alat": [
   {
@@ -351,7 +351,10 @@
   "tambah_atau_hapus_tautan_sheet",
   "ubah_status_pemantauan",
   "ubah_level_batch",
-  "ubah_target_pk"
+  "ubah_target_pk",
+  "buka_identitas",
+  "tampilkan_nomor_registrasi",
+  "ekspor_daftar_peserta"
  ],
  "catatan_otonomi": "Run terjadwal (cron) hanya boleh: fetch tautan yang sudah didaftarkan manusia, hitung, simpan snapshot, buat item validasi dan ringkasan, panggil analis. Tidak boleh: menambah sumber, mengubah level/aturan/parameter, menyetujui laporan."
 }

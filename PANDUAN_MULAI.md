@@ -1,4 +1,4 @@
-# Panduan Mulai (v0.2.1)
+# Panduan Mulai (v0.2.2)
 
 Tujuan: dari nol sampai fase 1 selesai di Google AI Studio, dengan database di Supabase dan kode di GitHub.
 Nama menu di AI Studio, Supabase, dan GitHub dapat berubah; gunakan sebagai petunjuk, bukan kata demi kata.
@@ -35,7 +35,7 @@ Saran: buat **dua proyek Supabase** bila memungkinkan: satu untuk pengembangan (
 
 ## C. Siapkan Supabase
 1. Buat proyek baru (kata sandi database kuat, simpan di pengelola kata sandi).
-2. **SQL Editor**: tempel isi `contracts/migrations/001_schema.sql`, jalankan. Setelah sukses, tempel `002_pemantauan.sql`, jalankan. Urutan tidak boleh terbalik; masing-masing sekali saja.
+2. **SQL Editor**: tempel isi `contracts/migrations/001_schema.sql`, jalankan. Setelah sukses, tempel `002_pemantauan.sql`, lalu `003_minimisasi_identitas.sql`. Urutan 001, 002, 003 tidak boleh terbalik; masing-masing sekali saja. Jalankan 003 sebelum ada data (berkas ini menghapus kolom nama dan instansi).
    Jika ada galat, hentikan dan kirim teks galatnya.
 3. Authentication: **nonaktifkan pendaftaran mandiri** (sign-up). Buat satu pengguna admin lewat Authentication, Users, Add user (email Anda, kata sandi acak minimal 12 karakter; bukan pola mudah ditebak).
 4. Jadikan pengguna itu admin aplikasi. SQL Editor:
@@ -60,9 +60,9 @@ Saat repositori dihubungkan, AI Studio dapat langsung membuat project. Itu norma
 ### D2. Fase 0, uji baca (tanpa mengubah kode)
 Tempel prompt ini di project (jangan tempel fase 1 dulu):
 ```
-Jangan mengubah atau menambah berkas apa pun. Baca README.md, SPEC.md, knowledge/aturan_talenta_digital_v1.md, daftar contracts/ dan agents/. Lalu jawab singkat: (1) 5 aturan hitung utama, (2) rumus onboarding untuk 28 modul dan 45 modul, (3) apa yang boleh dan tidak boleh dilakukan agent Pemantau Harian, (4) daftar nama berkas di contracts/migrations dan agents/.
+Jangan mengubah atau menambah berkas apa pun. Baca README.md, SPEC.md, knowledge/aturan_talenta_digital_v1.md, daftar contracts/ dan agents/. Lalu jawab singkat: (1) 5 aturan hitung utama, (2) rumus onboarding untuk 28 modul dan 45 modul, (3) apa yang boleh dan tidak boleh dilakukan agent Pemantau Harian, (4) daftar nama berkas di contracts/migrations dan agents/, (5) data identitas apa yang disimpan sistem dan apa yang tidak.
 ```
-Cocok bila: onboarding 28 modul = 26, 45 modul = 41; pembatalan dikeluarkan; kumulatif tertimbang; agent terjadwal tidak boleh mengubah level/aturan/parameter/target; migrasi 001 dan 002. Jika jawabannya meleset atau AI Studio tidak menemukan berkas, kembali ke D1.
+Cocok bila: onboarding 28 modul = 26, 45 modul = 41; pembatalan dikeluarkan; kumulatif tertimbang; agent terjadwal tidak boleh mengubah level/aturan/parameter/target; migrasi 001, 002, dan 003; hanya nomor registrasi yang disimpan (private), nama dan instansi tidak. Jika jawabannya meleset atau AI Studio tidak menemukan berkas, kembali ke D1.
 
 ### D3. Kunci rahasia
 Tambahkan lewat pengaturan Secrets/Environment di project AI Studio (nama menu dapat berbeda), bukan di kode:
@@ -88,7 +88,7 @@ Untuk setiap fase (01, 02, 02b, 03, 04, 05):
 | Fase | Hasil yang harus Anda lihat |
 |---|---|
 | 01 | Login admin berfungsi; pengguna anonim tidak bisa membaca data; menu lengkap; Actions hijau |
-| 02 | Tambah batch dari tautan sheet (atau unggah cadangan); alias sama saat dimuat ulang; anomali tampil di Antrean Validasi |
+| 02 | (setelah migrasi 003) Tambah batch dari tautan sheet (atau unggah cadangan); alias sama saat dimuat ulang; anomali tampil di Antrean Validasi |
 | 02b | Tombol Perbarui bekerja; endpoint cron menolak tanpa rahasia (401); dua kali sehari = satu snapshot |
 | 03 | Dashboard banyak batch dengan fase, K/B/R, tingkat EWS; parameter EWS dapat diubah dan tercatat |
 | 04 | Agent berjalan dan terlihat di Aktivitas Agent; AI tidak mengubah tingkat; kill-switch AI berfungsi |

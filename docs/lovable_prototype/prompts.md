@@ -20,6 +20,9 @@ Pakai Lovable tanpa menyambungkan data asli. Pilihan Lovable Cloud boleh untuk d
 "Laporan: pilih bulan dan TA, tombol 'Susun draf', tampilkan bagian (Ringkasan Capaian, Tabel Batch, Kondisi Batch, Non-capaian, Analisis, Rekomendasi, Sumber Data, Catatan Penggunaan AI) dapat diedit, tombol Setujui, lalu Unduh (simulasi, tanpa berkas)."
 
 ## 7. Kartu Agent dan Privasi
-"Kartu Agent: untuk Pembaca PK, Validator Masukan, Analis EWS, Penulis Laporan, Verifikator: tujuan, sumber pengetahuan, alat, data yang dikirim ke AI, model, batas otonomi, pengambil keputusan. Privasi dan Kepatuhan: inventaris pemrosesan, retensi, permintaan subjek data, log insiden (pengingat 3x24 jam), log akses pemetaan alias (alasan wajib), catatan: pertimbangan UU 27/2022 dan SE 9/2023, bukan klaim kepatuhan; kill-switch AI."
+"Kartu Agent: untuk Pembaca PK, Validator Masukan, Analis EWS, Penulis Laporan, Verifikator: tujuan, sumber pengetahuan, alat, data yang dikirim ke AI, model, batas otonomi, pengambil keputusan. Privasi dan Kepatuhan: log pembukaan nomor registrasi (waktu, pengguna, alias, alasan), inventaris pemrosesan, retensi, permintaan subjek data, log insiden (pengingat 3x24 jam), log akses pemetaan alias (alasan wajib), catatan: pertimbangan UU 27/2022 dan SE 9/2023, bukan klaim kepatuhan; kill-switch AI."
 
 Setelah tinjau: ekspor tangkapan layar dan komponen sebagai referensi untuk AI Studio; jangan jadikan skema Lovable sebagai skema produksi.
+
+## 8. Daftar tindak lanjut
+"Di halaman detail batch tambahkan tab 'Tindak lanjut': tabel alias peserta (P-A1B2...), modul selesai/total, status (di tepi ambang / belum lulus), nomor registrasi tersamar (******7890). Tombol 'Tampilkan nomor registrasi' membuka dialog yang mewajibkan alasan (min. 10 karakter) lalu menampilkan nomor sementara 10 detik (data contoh). Tidak ada tombol ekspor. Catatan: 'Nama dan instansi tidak disimpan di sistem.'"

@@ -9,7 +9,8 @@ Dipakai oleh kode (konstanta) dan dibaca agent (konteks). Perubahan = versi baru
 - `level_masuk_capaian`: [Fundamental]
 - Sinonim: Basic = Fundamental
 - Tab data: "All Pendaftar Web" (konfigurasi; verifikasi pada contoh nyata)
-- Status dikeluarkan: Pembatalan
+- Status dikeluarkan: Pembatalan (catatan lintas batch hanya bila `catatan_lintas_batch_aktif` = true, setelah nomor registrasi diverifikasi stabil)
+- Identitas: hanya nomor registrasi yang disimpan (private); nama dan instansi tidak disimpan
 - Pola tautan pelatihan: https://digitalent.komdigi.go.id/pelatihan/{id}
 - Tingkat EWS dan parameter waktu: lihat bawah
 
@@ -35,7 +36,7 @@ Pemantauan: batch dipantau sampai tanggal selesai + grace (7 hari). Data basi bi
 Tren harian (informasional pada MVP-1): penambahan lulus/onboarding per hari dari snapshot agregat. Penaik tingkat berbasis laju = setelah kalibrasi.
 
 ## Indikator risiko yang boleh dipakai analis
-Hanya progres belajar: persentase modul terselesaikan, jumlah peserta di tepi ambang onboarding (selesai = ambang-1), tren harian, jarak ke 100%. Dilarang: sekolah/instansi, gender, usia, daerah, atribut pribadi lain.
+Hanya progres belajar: persentase modul terselesaikan, jumlah peserta di tepi ambang onboarding (selesai = ambang-1), tren harian, jarak ke 100%. Dilarang: sekolah/instansi, gender, usia, daerah, nomor registrasi, atribut pribadi lain.
 
 ## Bagian laporan dan sumbernya
 Ringkasan_Capaian (hitung_capaian), Tabel_Batch (kode), Kondisi_Batch, Pelaksanaan_Non_Capaian (Intermediate), Analisis, Rekomendasi, Sumber_Data (kode: daftar berkas + tanggal ambil), Catatan_Penggunaan_AI (opsional).

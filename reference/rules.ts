@@ -227,10 +227,25 @@ export function aliasHmac(secret: string, batchId: string, nilai: string): strin
   const h = createHmac("sha256", secret).update(`${batchId}|${nilai.trim().toLowerCase()}`).digest("hex");
   return "P-" + h.slice(0, 10).toUpperCase();
 }
-/** person_key lintas batch: hanya server; dipakai untuk catatan "kemungkinan sama". */
-export function personKey(secret: string, nama: string, noReg: string): string {
-  const norm = (s: string) => s.normalize("NFKD").replace(/[^\p{L}\p{N}]/gu, "").toLowerCase();
-  return createHmac("sha256", secret).update(`pk|${norm(nama)}|${norm(noReg)}`).digest("hex").slice(0, 16);
+/**
+ * Kunci orang lintas batch, hanya server. mode "noreg": HMAC no. registrasi (bila stabil lintas batch);
+ * mode "nama": HMAC nama ternormalisasi (hash saja, nama tidak disimpan). Dipakai untuk catatan "kemungkinan sama".
+ */
+export function kunciOrang(secret: string, r: { noReg?: string; nama?: string }, mode: "noreg" | "nama"): string | null {
+  const v = mode === "noreg" ? r.noReg : r.nama;
+  const n = v ? norm(v) : "";
+  if (!n) return null;
+  return createHmac("sha256", secret).update(`ko|${mode}|${n}`).digest("hex").slice(0, 24);
+}
+/** Tampilan daftar di UI: tampilkan hanya 4 karakter terakhir; penuh hanya lewat fungsi DB buka_identitas (alasan wajib, tercatat). */
+export function maskNoReg(noReg: string): string {
+  const t = noReg.trim();
+  return t.length <= 4 ? "*".repeat(t.length) : "*".repeat(t.length - 4) + t.slice(-4);
+}
+/** Sentinel keluar: periksa teks terhadap daftar identitas yang sedang diproses (no. registrasi dll) selain pola umum. */
+export function containsIdentifier(teks: string, identifiers: string[]): boolean {
+  const t = norm(teks);
+  return identifiers.some((i) => { const n = norm(i); return n.length >= 4 && t.includes(n); }) || containsPii(teks);
 }
 export function containsPii(teks: string): boolean {
   return /\b\d{16}\b|[\w.+-]+@[\w-]+\.[\w.]+|\b(?:\+62|08)\d{8,12}\b/.test(teks);

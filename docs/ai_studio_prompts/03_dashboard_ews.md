@@ -4,5 +4,6 @@ Tugas:
 2. Tren harian dari `snapshot` (garis: onboarding, lulus; garis target; penanda perubahan tingkat dari `ews_perubahan_tingkat`).
 3. Parameter EWS: halaman admin untuk melihat/mengubah `ews_parameter` (validasi rentang, alasan wajib, tulis `ews_parameter_log`/audit). Fungsi `PARAM` dibaca dari DB.
 4. Aktivitas Agent: daftar `agent_runs` (filter manual/terjadwal) dan detail timeline `agent_run_steps` via Supabase Realtime; panel "Data yang dikirim ke AI" per langkah. Pembungkus `runStep(...)` mencatat durasi, ringkasan, sumber pengetahuan.
+5b. Daftar tindak lanjut: per batch, daftar alias peserta onboarding yang belum lulus dan peserta di tepi ambang onboarding (selesai = ambang-1), beserta progres (modul selesai/total) dan nomor registrasi tersamar (`maskNoReg`). Tombol "Tampilkan nomor registrasi" memanggil RPC `buka_identitas(alias, alasan)` (alasan wajib >= 10 karakter, tampil di layar saja). Tanpa ekspor massal dan tanpa salin otomatis seluruh daftar. Daftar ini tidak pernah dikirim ke Gemini.
 5. Pengaturan: kill-switch AI (`ai_aktif`) dan `pemantauan_harian_aktif`.
 Aturan: UI tidak menghitung; semua angka dan tingkat dari fungsi server memakai `rules.ts`.

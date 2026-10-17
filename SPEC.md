@@ -1,4 +1,10 @@
-# SPEC MVP-1 (v0.2)
+# SPEC MVP-1 (v0.2.2)
+
+## Perubahan v0.2.2 (minimisasi identitas)
+- Nama dan instansi TIDAK disimpan di sistem; hanya ada di sheet sumber. Satu-satunya identitas yang disimpan: nomor registrasi, di skema `private` (admin, RLS), untuk tindak lanjut.
+- Nomor registrasi tetap data pribadi (dapat dicocokkan dengan nama lewat sheet/LMS); tidak pernah dikirim ke Gemini dan tidak masuk laporan. Pembukaan penuh hanya lewat fungsi `buka_identitas` (alasan wajib, tercatat).
+- Catatan peserta pembatalan lintas batch NONAKTIF sampai admin memverifikasi apakah nomor registrasi stabil lintas batch (`noreg_stabil_lintas_batch`).
+- Sentinel keluar memeriksa teks terhadap daftar nomor registrasi yang sedang diproses.
 
 ## Perubahan v0.2
 - Banyak batch dapat didaftarkan dan dipantau sekaligus (portofolio).
@@ -23,7 +29,7 @@ Aplikasi EWS (peringatan dini) capaian pelatihan terhadap Perjanjian Kinerja (PK
 3. Onboarding: `selesai_n * 10 >= total_modul * 9` (28 modul -> 26; 45 -> 41).
 4. Lulus: `selesai_n == total_modul`.
 5. Capaian batch = lulus/onboarding. Capaian kumulatif tahunan = SUM(lulus)/SUM(onboarding) (tertimbang, BUKAN rata-rata persen batch). Onboarding 0 -> capaian tidak terdefinisi (null), bukan 0.
-6. Pembatalan: dikeluarkan dari semua perhitungan. Catatan lintas batch minimal jika `person_key` sama muncul lagi (tampil "kemungkinan sama", konfirmasi lewat Antrean Validasi).
+6. Pembatalan: dikeluarkan dari semua perhitungan. Catatan lintas batch ("kemungkinan sama", konfirmasi lewat Antrean Validasi) memakai `kunciOrang`: mode `noreg` bila nomor registrasi terbukti stabil lintas batch, mode `nama` (hash saja) bila tidak. Fitur ini mati sampai `noreg_stabil_lintas_batch` diverifikasi admin.
 7. Kebutuhan lulus untuk >= 87%: `ceil(0.87 * onboarding)` (mis. 45 -> 40). Dorong peserta ke 100%, bukan hanya 90%.
 8. TA ditentukan dari tanggal mulai batch. Batch lintas tahun: peringatan, tetap pakai tanggal mulai.
 9. Level dari nama berkas (bukan Final Assessment); dapat diubah manual (dicatat sumbernya). Batch level belum terkonfirmasi diproses sementara, tidak masuk capaian resmi (tampil sebagai skenario).
@@ -36,7 +42,7 @@ Lihat `knowledge/aturan_talenta_digital_v1.md` untuk tabel fase, K/B/R, target p
 1. Admin mendaftarkan batch dengan menempel tautan Google Sheets (banyak batch). Batch = ID pelatihan + TA; fetch/unggah ulang = snapshot baru, bukan batch baru. Tautan duplikat ditolak.
 2. Pembacaan sheet: Google Sheets API read-only memakai service account yang dibagikan akses Viewer ke tiap sheet (rekomendasi). Alternatif tidak disarankan: "publikasikan ke web" (membuka data pribadi ke publik). Cadangan: unggah berkas. Tab dibaca berdasarkan nama (konfigurasi, default "All Pendaftar Web"); tab hilang -> peringatan.
 3. Pemicu: (a) cron harian (jam WIB dapat diatur; endpoint dilindungi `CRON_SECRET`), (b) tombol "Perbarui sekarang" per batch dan "Perbarui semua". Satu batch per pemanggilan fungsi (hindari batas waktu); kegagalan satu batch tidak menghentikan lainnya.
-4. Mapping alias: server menghitung `kunci_baris` (HMAC no. registrasi, jika kosong nama+instansi) lalu mencari di `private.alias_map`; ditemukan -> alias dipakai ulang; baru -> alias baru; hilang dari sheet -> tidak dihapus, ditandai. Kunci duplikat dalam sheet -> item validasi.
+4. Mapping alias: server menghitung `kunci_baris` (HMAC no. registrasi; jika kosong, HMAC nama+instansi sebagai hash saja dan baris ditandai `no_registrasi_kosong` karena tidak dapat ditelusuri) lalu mencari di `private.alias_map` (menyimpan alias, kunci, dan nomor registrasi saja); ditemukan -> alias dipakai ulang; baru -> alias baru; hilang dari sheet -> tidak dihapus, ditandai. Kunci duplikat dalam sheet -> item validasi.
 5. Snapshot harian agregat (satu per batch per hari WIB) dengan histogram jumlah modul selesai; peserta_masked menyimpan keadaan terkini. Checksum sama -> "tidak berubah" (tetap dihitung segar).
 6. Deteksi anomali setiap fetch: total modul berubah, peserta turun tajam, progres mundur, lulus turun, peserta hilang, kunci duplikat, data basi, akses ditolak/tab hilang -> Antrean Validasi; angka resmi tidak diubah diam-diam.
 7. Pemantauan berhenti pada tanggal selesai + grace (7 hari) atau saat admin menonaktifkan.
@@ -54,7 +60,10 @@ Otonomi run terjadwal: BOLEH mengambil dari tautan yang sudah didaftarkan manusi
 Bukti agent: loop rencana -> alat -> tulis -> verifikasi -> gerbang manusia, state di `agent_runs`/`agent_run_steps`, kill-switch AI (aplikasi tetap jalan tanpa AI dengan hasil deterministik).
 
 ## 5. Privasi dan etika
-- Masking: nama, no. registrasi, instansi/sekolah -> alias HMAC; pemetaan di skema `private` dengan RLS; pembukaan pemetaan dicatat beserta alasan.
+- Minimisasi identitas: nama dan instansi dibuang saat pemrosesan (tidak disimpan, tidak di log). Nomor registrasi disimpan hanya di `private.alias_map` (RLS, tanpa policy klien) untuk tindak lanjut. Semua lapisan lain (peserta_masked, snapshot, agent, Gemini, laporan) hanya alias/agregat.
+- Tampilan: daftar tindak lanjut menampilkan alias dan nomor registrasi tersamar (`maskNoReg`, 4 karakter terakhir). Nomor penuh hanya lewat `buka_identitas(alias, alasan)`: admin, alasan >= 10 karakter, tercatat di audit_log; tampil di layar, tidak diekspor massal.
+- Sentinel keluar: `containsIdentifier` memeriksa semua teks ke Gemini dan ke laporan terhadap nomor registrasi yang sedang diproses + pola PII umum; terdeteksi -> blok dan catat.
+- Nomor registrasi bukan anonim: dapat dicocokkan dengan nama lewat sheet/LMS. Pertimbangan UU No. 27/2022 berlaku penuh.
 - Minimisasi ke Gemini: hanya alias + progres + agregat. Sentinel PII sebelum panggilan.
 - Laporan memakai agregat (batas minimal sel, mis. tidak menampilkan kelompok < 5 jika ada perincian).
 - Masking = pseudonimisasi, bukan anonimisasi (UU PDP). Perlakukan sebagai data pribadi.
@@ -74,4 +83,4 @@ Template DOCX dengan penanda `<<...>>` (docxtemplater, delimiter `<<` `>>`): `<<
 Contoh: `MIRROR - DTA VBL 13108 FAWD 1-31 Sept`. Angka 5 digit = ID pelatihan -> `https://digitalent.komdigi.go.id/pelatihan/<ID>` (pola dapat diatur). Kode dapat berupa alias (FAWD) atau tema saja (OIAT). Tanpa tahun (pakai TA). Regex dulu, Gemini cadangan, hasil dapat diedit. Validasi: hanya tab "All Pendaftar Web" (nama tab belum terverifikasi pada contoh; jadikan konfigurasi).
 
 ## 10. Terbuka (belum terverifikasi)
-Nama tab persis; baris ICOT di PK; teks lengkap SE 9/2023 (jumlah nilai); regulasi AI terbaru; ketentuan data Gemini API; kompatibilitas server AI Studio di Vercel; ketentuan lokasi data; impor repo Lovable ke AI Studio; hak akses service account ke sheet milik pihak lain; batas frekuensi cron pada paket Vercel (alternatif: Supabase pg_cron atau GitHub Actions terjadwal); asumsi target antara = kumulatif; kalibrasi parameter EWS; apakah sheet diperbarui di jam tertentu (atur jam cron).
+Nama tab persis; baris ICOT di PK; teks lengkap SE 9/2023 (jumlah nilai); regulasi AI terbaru; ketentuan data Gemini API; kompatibilitas server AI Studio di Vercel; ketentuan lokasi data; impor repo Lovable ke AI Studio; hak akses service account ke sheet milik pihak lain; batas frekuensi cron pada paket Vercel (alternatif: Supabase pg_cron atau GitHub Actions terjadwal); asumsi target antara = kumulatif; kalibrasi parameter EWS; apakah sheet diperbarui di jam tertentu (atur jam cron).; apakah nomor registrasi tetap sama untuk orang yang sama di batch berbeda (menentukan fitur catatan pembatalan lintas batch); apakah format nomor registrasi seragam (sentinel keluar memakai kecocokan teks).

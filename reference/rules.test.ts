@@ -163,3 +163,21 @@ test("bandingkan snapshot: anomali", () => {
 test("histogram tanpa pembatalan", () => {
   assert.deepEqual(R.histogram([{ modulSelesai: 5, totalModul: 28 }, { modulSelesai: 5, totalModul: 28 }, { modulSelesai: 28, totalModul: 28, batal: true }]), { 5: 2 });
 });
+
+// ====== v0.2.2: minimisasi identitas ======
+test("kunci orang: noreg vs nama, tanpa menyimpan nilai asli", () => {
+  const a = R.kunciOrang("s", { noReg: "REG-001", nama: "Ani" }, "noreg");
+  assert.equal(a, R.kunciOrang("s", { noReg: "reg 001", nama: "Budi" }, "noreg")); // nama tak memengaruhi
+  assert.equal(R.kunciOrang("s", { nama: "Ani  Putri" }, "nama"), R.kunciOrang("s", { nama: "ani putri" }, "nama"));
+  assert.equal(R.kunciOrang("s", { nama: "Ani" }, "noreg"), null); // tidak ada noreg
+  assert.ok(!String(a).toLowerCase().includes("reg"));
+});
+test("mask no registrasi untuk tampilan", () => {
+  assert.equal(R.maskNoReg("1234567890"), "******7890");
+  assert.equal(R.maskNoReg("123"), "***");
+});
+test("sentinel keluar mengenali identitas yang sedang diproses", () => {
+  assert.equal(R.containsIdentifier("peserta REG-001 selesai", ["REG-001", "REG-002"]), true);
+  assert.equal(R.containsIdentifier("peserta P-AB12 selesai 26 modul", ["REG-001"]), false);
+  assert.equal(R.containsIdentifier("ab", ["ab"]), false); // terlalu pendek, abaikan
+});
