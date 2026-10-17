@@ -1,0 +1,8 @@
+{
+  "name": "EWS Capaian PK Talenta Digital",
+  "description": "Sistem Peringatan Dini (EWS) capaian Perjanjian Kinerja pelatihan dan penyusun laporan bulanan Talenta Digital UPT BLSDM Komdigi Yogyakarta",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
