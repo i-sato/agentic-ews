@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/pantau-harian",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

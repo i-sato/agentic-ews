@@ -42,6 +42,8 @@ export interface ProcessSheetResult {
     aliasBaru: number;
     aliasHilang: number;
     kunciDuplikat: number;
+    barisDibuang?: number;
+    noRegKosong?: number;
   };
   anomali: string[];
   durasiMs: number;
@@ -126,18 +128,15 @@ export async function prosesSheet(
 
   let lmsMismatchCount = 0;
   let emptyNoRegCount = 0;
+  let emptyRowsDiscarded = 0;
 
   for (let rIdx = 0; rIdx < dataRows.length; rIdx++) {
     const row = dataRows[rIdx];
-    const nama = colNama >= 0 ? (row[colNama] || "").trim() : `Peserta_${rIdx + 1}`;
+    const rawNamaCell = colNama >= 0 ? (row[colNama] || "").trim() : "";
+    const nama = rawNamaCell || (colNama >= 0 ? "" : `Peserta_${rIdx + 1}`);
     const noReg = colNoReg >= 0 ? (row[colNoReg] || "").trim() : "";
     const instansi = colInstansi >= 0 ? (row[colInstansi] || "").trim() : "";
     const statusDaftar = colStatus >= 0 ? (row[colStatus] || "").trim() : "Peserta";
-
-    // Pembatalan dikeluarkan dari semua perhitungan
-    const isBatal =
-      statusDaftar.toLowerCase().includes("batal") ||
-      statusDaftar.toLowerCase().includes("drop");
 
     // Hitung ulang dari kolom modul (abaikan % LMS dan STATUS)
     let modulSelesai = 0;
@@ -147,6 +146,23 @@ export async function prosesSheet(
         modulSelesai++;
       }
     }
+
+    // Identifikasi baris kosong atau baris label ringkasan (TOTAL, JUMLAH, REKAPITULASI)
+    const isNonParticipantSummary =
+      /^(total|jumlah|ringkasan|rekapitulasi)\b/i.test(nama) ||
+      /^(total|jumlah|ringkasan|rekapitulasi)\b/i.test(row[0] || "");
+
+    const hasAnyIdentity = Boolean(noReg || rawNamaCell || instansi);
+
+    if (isNonParticipantSummary || (!hasAnyIdentity && modulSelesai === 0)) {
+      emptyRowsDiscarded++;
+      continue; // Buang baris kosong atau baris rekapitulasi
+    }
+
+    // Pembatalan dikeluarkan dari semua perhitungan
+    const isBatal =
+      statusDaftar.toLowerCase().includes("batal") ||
+      statusDaftar.toLowerCase().includes("drop");
 
     // Periksa apakah LMS tidak cocok
     let persenLmsVal: number | undefined;
@@ -162,7 +178,7 @@ export async function prosesSheet(
       }
     }
 
-    // Validasi baris tanpa nomor registrasi
+    // Validasi baris peserta yang sah tetapi tidak memiliki nomor registrasi
     if (!noReg) {
       emptyNoRegCount++;
     }
@@ -374,6 +390,9 @@ export async function prosesSheet(
       baru: mappingResult.baru,
       hilang: mappingResult.hilang.length,
       anomali: anomaliAudit.anomali,
+      total_baris_sheet: rows.length,
+      baris_kosong_diabaikan: emptyRowsDiscarded,
+      no_registrasi_kosong: emptyNoRegCount,
     },
     durasi_ms: durasiMs,
   });
@@ -387,6 +406,7 @@ export async function prosesSheet(
       batchId,
       pemicu,
       anomaliCount: anomaliAudit.anomali.length,
+      barisDibuang: emptyRowsDiscarded,
       durasiMs,
     },
   });
@@ -407,6 +427,8 @@ export async function prosesSheet(
       aliasBaru: mappingResult.baru,
       aliasHilang: mappingResult.hilang.length,
       kunciDuplikat: mappingResult.duplikat.length,
+      barisDibuang: emptyRowsDiscarded,
+      noRegKosong: emptyNoRegCount,
     },
     anomali: anomaliAudit.anomali,
     durasiMs,
